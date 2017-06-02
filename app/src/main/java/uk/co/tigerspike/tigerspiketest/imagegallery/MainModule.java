@@ -18,7 +18,6 @@ public class MainModule {
     }
 
     @Provides
-    @CustomScope
     public MainContract.View providesMainContractView() {
         return mView;
     }

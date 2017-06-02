@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -24,6 +25,7 @@ import uk.co.tigerspike.tigerspiketest.data.model.Image;
 public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.ViewHolder> {
 
     private List<Image> imageList;
+    private IClickItem iClickItem;
 
     @Inject
     public ImageListAdapter() {
@@ -52,7 +54,15 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
         return imageList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    interface IClickItem {
+        void OnClick(Image image);
+    }
+
+    public void setiClickItem(IClickItem iClickItem) {
+        this.iClickItem = iClickItem;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.image_view)
         ImageView imageView;
@@ -60,6 +70,12 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            iClickItem.OnClick(imageList.get(getAdapterPosition()));
         }
     }
 }

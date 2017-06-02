@@ -1,10 +1,13 @@
 
 package uk.co.tigerspike.tigerspiketest.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Image {
+public class Image implements Parcelable {
 
     @SerializedName("title")
     @Expose
@@ -75,7 +78,7 @@ public class Image {
     }
 
     public String getPublished() {
-        return published;
+        return published.replaceAll("[A-Z]", " ");
     }
 
     public void setPublished(String published) {
@@ -106,15 +109,13 @@ public class Image {
         this.tags = tags;
     }
 
-    public class Media {
+    public static class Media implements Parcelable {
 
         @SerializedName("m")
         @Expose
         private String m;
 
         public String getM() {
-            // use larger size image
-            m = m.replace("_m.jpg", "_b.jpg");
             return m;
         }
 
@@ -122,6 +123,78 @@ public class Image {
             this.m = m;
         }
 
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.m);
+        }
+
+        public Media() {
+        }
+
+        protected Media(Parcel in) {
+            this.m = in.readString();
+        }
+
+        public static final Creator<Media> CREATOR = new Creator<Media>() {
+            @Override
+            public Media createFromParcel(Parcel source) {
+                return new Media(source);
+            }
+
+            @Override
+            public Media[] newArray(int size) {
+                return new Media[size];
+            }
+        };
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeString(this.link);
+        dest.writeParcelable(this.media, flags);
+        dest.writeString(this.dateTaken);
+        dest.writeString(this.description);
+        dest.writeString(this.published);
+        dest.writeString(this.author);
+        dest.writeString(this.authorId);
+        dest.writeString(this.tags);
+    }
+
+    public Image() {
+    }
+
+    protected Image(Parcel in) {
+        this.title = in.readString();
+        this.link = in.readString();
+        this.media = in.readParcelable(Media.class.getClassLoader());
+        this.dateTaken = in.readString();
+        this.description = in.readString();
+        this.published = in.readString();
+        this.author = in.readString();
+        this.authorId = in.readString();
+        this.tags = in.readString();
+    }
+
+    public static final Parcelable.Creator<Image> CREATOR = new Parcelable.Creator<Image>() {
+        @Override
+        public Image createFromParcel(Parcel source) {
+            return new Image(source);
+        }
+
+        @Override
+        public Image[] newArray(int size) {
+            return new Image[size];
+        }
+    };
 }

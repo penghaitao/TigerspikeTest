@@ -2,6 +2,7 @@ package uk.co.tigerspike.tigerspiketest.imagegallery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void setLoadingIndicator(boolean active) {
-
+        swipeRefreshLayout.setRefreshing(active);
     }
 
     @Override
@@ -56,6 +60,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         imageListAdapter.setData(imageList);
         recyclerView.setAdapter(imageListAdapter);
         imageListAdapter.setiClickItem(this);
+    }
+
+    @Override
+    public void showError() {
+        Toast.makeText(this, R.string.error_message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

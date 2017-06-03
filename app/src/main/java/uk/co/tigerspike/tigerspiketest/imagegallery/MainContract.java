@@ -17,6 +17,8 @@ public interface MainContract {
         void setLoadingIndicator(boolean active);
 
         void showImageList(List<Image> imageList);
+
+        void showError();
     }
 
     interface Presenter {

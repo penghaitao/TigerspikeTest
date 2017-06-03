@@ -34,16 +34,19 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void loadImageList() {
+        mMainView.setLoadingIndicator(true);
         Call<Flickr> call = mRetrofit.create(FlickrServiceApi.class).getFlickr();
         call.enqueue(new Callback<Flickr>() {
             @Override
             public void onResponse(@NonNull Call<Flickr> call, @NonNull Response<Flickr> response) {
                 mMainView.showImageList(response.body().getImages());
+                mMainView.setLoadingIndicator(false);
             }
 
             @Override
             public void onFailure(@NonNull Call<Flickr> call, @NonNull Throwable t) {
-
+                mMainView.setLoadingIndicator(false);
+                mMainView.showError();
             }
         });
     }

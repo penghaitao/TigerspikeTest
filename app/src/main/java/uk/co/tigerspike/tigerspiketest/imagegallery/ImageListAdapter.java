@@ -54,6 +54,10 @@ public class ImageListAdapter extends RecyclerView.Adapter<ImageListAdapter.View
         return imageList.size();
     }
 
+    public List<Image> getImageList() {
+        return imageList;
+    }
+
     interface IClickItem {
         void OnClick(Image image);
     }

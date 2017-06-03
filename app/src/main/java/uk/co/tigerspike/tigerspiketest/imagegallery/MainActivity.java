@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import java.util.List;
 
@@ -59,5 +63,44 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         Intent intent = new Intent(this, ImageDetailActivity.class);
         intent.putExtra(Constants.IMAGE, image);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_order:
+                showOrderPopupMenu();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void showOrderPopupMenu() {
+        PopupMenu popup = new PopupMenu(this, findViewById(R.id.menu_order));
+        popup.getMenuInflater().inflate(R.menu.order_images, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.publish_time:
+                        mMainPresenter.orderImageList(imageListAdapter.getImageList(), Constants.ORDER_BY_PUBLISH_DATE);
+                        break;
+                    default:
+                        mMainPresenter.orderImageList(imageListAdapter.getImageList(), Constants.ORDER_BY_TAKEN_DATE);
+                        break;
+                }
+                return true;
+            }
+        });
+
+        popup.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater=getMenuInflater();
+        inflater.inflate(R.menu.home_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

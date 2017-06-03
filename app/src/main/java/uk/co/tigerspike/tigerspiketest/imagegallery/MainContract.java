@@ -12,6 +12,8 @@ public interface MainContract {
 
     interface View {
 
+        void showOrderPopupMenu();
+
         void setLoadingIndicator(boolean active);
 
         void showImageList(List<Image> imageList);
@@ -19,5 +21,7 @@ public interface MainContract {
 
     interface Presenter {
         void loadImageList();
+
+        void orderImageList(List<Image> images, String order_type);
     }
 }

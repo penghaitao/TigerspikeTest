@@ -2,4 +2,7 @@
     <string name="app_name">TigerspikeTest</string>
     <string name="image_saved">Image Saved</string>
     <string name="image_saved_already">Image Saved already</string>
+    <string name="menu_order">Order</string>
+    <string name="order_by_publish_time">ORDER BY PUBLISH DATE</string>
+    <string name="order_by_taken_time">ORDER BY TAKEN TIME</string>
 </resources>

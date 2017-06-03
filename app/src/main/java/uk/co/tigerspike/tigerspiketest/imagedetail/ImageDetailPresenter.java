@@ -1,5 +1,8 @@
 package uk.co.tigerspike.tigerspiketest.imagedetail;
 
+import android.content.Intent;
+import android.net.Uri;
+
 import javax.inject.Inject;
 
 import uk.co.tigerspike.tigerspiketest.data.model.Image;
@@ -21,12 +24,11 @@ public class ImageDetailPresenter implements ImageDetailContract.Presenter {
 
     @Override
     public void showImage() {
-        String media = mImage.getMedia().getM();
-        mView.showImage(media.replace("_m.jpg", "_b.jpg"));
     }
 
     @Override
     public void showDetail() {
 
     }
+
 }

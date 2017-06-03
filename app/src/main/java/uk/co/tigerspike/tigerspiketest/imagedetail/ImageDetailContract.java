@@ -9,7 +9,7 @@ import uk.co.tigerspike.tigerspiketest.data.model.Image;
 public interface ImageDetailContract {
 
     interface View {
-        void showImage(String imageUrl);
+//        void showImage(String imageUrl);
         void showDetail(Image image);
     }
 

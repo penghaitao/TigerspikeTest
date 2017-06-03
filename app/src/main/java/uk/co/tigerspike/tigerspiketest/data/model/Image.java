@@ -62,7 +62,7 @@ public class Image implements Parcelable {
     }
 
     public String getDateTaken() {
-        return dateTaken;
+        return dateTaken.replaceAll("[A-Z]", " ");
     }
 
     public void setDateTaken(String dateTaken) {
@@ -117,6 +117,15 @@ public class Image implements Parcelable {
 
         public String getM() {
             return m;
+        }
+
+        public String getLargeSizeImage() {
+            return m.replace("_m.jpg", "_b.jpg");
+        }
+
+        public String getImageName() {
+            String[] urlBits = m.split("/");
+            return urlBits[urlBits.length-1].replace("_m.jpg", ".jpg");
         }
 
         public void setM(String m) {

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TigerspikeTest</string>
+    <string name="image_saved">Image Saved</string>
+    <string name="image_saved_already">Image Saved already</string>
 </resources>

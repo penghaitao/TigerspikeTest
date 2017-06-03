@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        swipeRefreshLayout.setEnabled(false);
         DaggerMainComponent.builder()
                 .netComponent(((App) getApplicationContext()).getNetComponent())
                 .mainModule(new MainModule(this))

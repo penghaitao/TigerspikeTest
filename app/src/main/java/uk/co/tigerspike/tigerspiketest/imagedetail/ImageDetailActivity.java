@@ -1,14 +1,11 @@
 package uk.co.tigerspike.tigerspiketest.imagedetail;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,7 +24,7 @@ import uk.co.tigerspike.tigerspiketest.data.model.Image;
 import uk.co.tigerspike.tigerspiketest.util.Constants;
 import uk.co.tigerspike.tigerspiketest.util.Utils;
 
-public class ImageDetailActivity extends AppCompatActivity implements ImageDetailContract.View, View.OnClickListener{
+public class ImageDetailActivity extends AppCompatActivity implements View.OnClickListener{
 
     @BindView(R.id.image_view)
     ImageView imageView;
@@ -48,8 +45,6 @@ public class ImageDetailActivity extends AppCompatActivity implements ImageDetai
 
     public static final int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
-    @Inject ImageDetailPresenter imageDetailPresenter;
-
     private Image image;
 
     @Override
@@ -59,10 +54,6 @@ public class ImageDetailActivity extends AppCompatActivity implements ImageDetai
         ButterKnife.bind(this);
 
         image = getIntent().getParcelableExtra(Constants.IMAGE);
-
-        DaggerImageDetailComponent.builder()
-                .imageDetailModule(new ImageDetailModule(this, image))
-                .build().inject(this);
 
         setupView();
 
@@ -80,22 +71,17 @@ public class ImageDetailActivity extends AppCompatActivity implements ImageDetai
     }
 
     @Override
-    public void showDetail(Image image) {
-
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.share_image:
-                if (verifyStoragePermissions()) {
+                if (Utils.verifyStoragePermissions(this)) {
                     String filename = image.getMedia().getImageName();
                     Uri uri;
-                    File file = new File(Utils.getImageDirectory(this)+filename);
+                    File file = new File(Utils.getImageDirectory()+filename);
                     if (file.exists()) {
                         uri = Uri.fromFile(file);
                     } else {
-                        uri = Utils.saveImage(imageView, filename, this);
+                        uri = Utils.saveImage(imageView, filename);
                     }
                     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null));
                     intent.putExtra(android.content.Intent.EXTRA_EMAIL, "");
@@ -106,11 +92,11 @@ public class ImageDetailActivity extends AppCompatActivity implements ImageDetai
                 }
                 break;
             case R.id.save_image:
-                if (verifyStoragePermissions()) {
+                if (Utils.verifyStoragePermissions(this)) {
                     String filename = image.getMedia().getImageName();
-                    File file = new File(Utils.getImageDirectory(this) + filename);
+                    File file = new File(Utils.getImageDirectory() + filename);
                     if (!file.exists()) {
-                        Uri uri = Utils.saveImage(imageView, filename, this);
+                        Uri uri = Utils.saveImage(imageView, filename);
                         if (uri != null) {
                             Toast.makeText(this, R.string.image_saved, Toast.LENGTH_SHORT).show();
                         }
@@ -127,24 +113,12 @@ public class ImageDetailActivity extends AppCompatActivity implements ImageDetai
         }
     }
 
-    public boolean verifyStoragePermissions() {
-        int hasWriteStoragePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (hasWriteStoragePermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_CODE_ASK_PERMISSIONS);
-            return false;
-        } else {
-            Utils.init(this);
-            return true;
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Utils.init(this);
+                    Utils.init();
                     Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, R.string.need_permission, Toast.LENGTH_LONG).show();

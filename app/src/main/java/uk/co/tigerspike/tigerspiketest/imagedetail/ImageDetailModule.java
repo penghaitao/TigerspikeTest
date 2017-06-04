@@ -3,7 +3,6 @@ package uk.co.tigerspike.tigerspiketest.imagedetail;
 import dagger.Module;
 import dagger.Provides;
 import uk.co.tigerspike.tigerspiketest.data.model.Image;
-import uk.co.tigerspike.tigerspiketest.imagegallery.MainContract;
 import uk.co.tigerspike.tigerspiketest.util.CustomScope;
 
 /**

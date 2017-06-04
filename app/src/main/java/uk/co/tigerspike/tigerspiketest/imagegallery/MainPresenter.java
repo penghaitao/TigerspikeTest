@@ -33,9 +33,14 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void loadImageList() {
+    public void loadImageList(String tag) {
         mMainView.setLoadingIndicator(true);
-        Call<Flickr> call = mRetrofit.create(FlickrServiceApi.class).getFlickr();
+        Call<Flickr> call;
+        if (tag == null) {
+            call = mRetrofit.create(FlickrServiceApi.class).getFlickr();
+        } else {
+            call = mRetrofit.create(FlickrServiceApi.class).getFlickrByTag(tag);
+        }
         call.enqueue(new Callback<Flickr>() {
             @Override
             public void onResponse(@NonNull Call<Flickr> call, @NonNull Response<Flickr> response) {

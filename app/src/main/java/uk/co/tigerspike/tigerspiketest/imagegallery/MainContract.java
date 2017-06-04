@@ -22,7 +22,7 @@ public interface MainContract {
     }
 
     interface Presenter {
-        void loadImageList();
+        void loadImageList(String tag);
 
         void orderImageList(List<Image> images, String order_type);
     }

@@ -1,8 +1,5 @@
 package uk.co.tigerspike.tigerspiketest.imagedetail;
 
-import android.content.Intent;
-import android.net.Uri;
-
 import javax.inject.Inject;
 
 import uk.co.tigerspike.tigerspiketest.data.model.Image;

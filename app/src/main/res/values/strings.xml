@@ -6,4 +6,7 @@
     <string name="order_by_publish_time">ORDER BY PUBLISH DATE</string>
     <string name="order_by_taken_time">ORDER BY TAKEN TIME</string>
     <string name="error_message">No image shown, please try later</string>
+    <string name="permission_granted">Now you can save or share image</string>
+    <string name="need_permission">You need to allow access to your storage, So we can save the picture</string>
+    <string name="search">Search</string>
 </resources>

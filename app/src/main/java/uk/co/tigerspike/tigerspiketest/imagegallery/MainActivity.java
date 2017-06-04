@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .mainModule(new MainModule(this))
                 .build().inject(this);
 
-        mMainPresenter.loadImageList();
+        mMainPresenter.loadImageList(null);
     }
 
     @Override
@@ -110,6 +111,20 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.home_menu, menu);
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        SearchView mSearchView = (SearchView) searchMenuItem.getActionView();
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mMainPresenter.loadImageList(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 }

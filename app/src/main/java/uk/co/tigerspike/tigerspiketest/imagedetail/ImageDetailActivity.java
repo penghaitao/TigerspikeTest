@@ -1,10 +1,10 @@
 package uk.co.tigerspike.tigerspiketest.imagedetail;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,6 +43,8 @@ public class ImageDetailActivity extends AppCompatActivity implements ImageDetai
     TextView publishTimeView;
     @BindView(R.id.taken_time_view)
     TextView takenTimeView;
+    @BindView(R.id.tag_view)
+    TextView tagView;
 
     public static final int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
@@ -71,6 +73,7 @@ public class ImageDetailActivity extends AppCompatActivity implements ImageDetai
         titleView.setText(image.getTitle());
         publishTimeView.setText("Published at: " + image.getPublished());
         takenTimeView.setText("Taken at: " + image.getDateTaken());
+        tagView.setText(image.getTags());
         shareView.setOnClickListener(this);
         saveView.setOnClickListener(this);
         openView.setOnClickListener(this);
@@ -94,9 +97,8 @@ public class ImageDetailActivity extends AppCompatActivity implements ImageDetai
                     } else {
                         uri = Utils.saveImage(imageView, filename, this);
                     }
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("image/jpeg");
-                    intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] {""});
+                    Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null));
+                    intent.putExtra(android.content.Intent.EXTRA_EMAIL, "");
                     intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Share Image");
                     intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
                     intent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -138,14 +140,14 @@ public class ImageDetailActivity extends AppCompatActivity implements ImageDetai
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Utils.init(this);
-                    Toast.makeText(this, "Now you can save or share image", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.permission_granted, Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(this, "You need to allow access to your storage, So we can save the picture", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.need_permission, Toast.LENGTH_LONG).show();
                 }
                 break;
             default:

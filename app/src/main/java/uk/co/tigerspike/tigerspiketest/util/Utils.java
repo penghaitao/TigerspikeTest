@@ -72,7 +72,6 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Uri contentUri = Uri.fromFile(file);
-        return contentUri;
+        return Uri.fromFile(file);
     }
 }
